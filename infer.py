@@ -9,24 +9,27 @@ from PIL import Image
 # package files
 from few_shots import IMGS_4SHOTS, IMGS_8SHOTS, SIMPLE_STD_4SHOTS, SIMPLE_CAP_4SHOTS, MULTI_ANS_STD_4SHOTS, MULTI_ANS_CAP_4SHOTS, SIMPLE_STD_8SHOTS, SIMPLE_CAP_8SHOTS, MULTI_ANS_STD_8SHOTS, MULTI_ANS_CAP_8SHOTS
 
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 def example_mapper(args):
     if args.shots == 4 and args.test_type == 'simple' and args.prompt_type == 'std':
         return IMGS_4SHOTS, SIMPLE_STD_4SHOTS
-    elif args.shots == 4 and args.test_type == 'simple' and args.prompt_type == 'cap':
+    elif args.shots == 4 and args.test_type == 'simple' and args.prompt_type == 'img_cap':
         return IMGS_4SHOTS, SIMPLE_CAP_4SHOTS
     elif args.shots == 4 and args.test_type == 'multi_ans' and args.prompt_type == 'std':
         return IMGS_4SHOTS , MULTI_ANS_STD_4SHOTS
-    elif args.shots == 4 and args.test_type == 'multi_ans' and args.prompt_type == 'cap':
+    elif args.shots == 4 and args.test_type == 'multi_ans' and args.prompt_type == 'img_cap':
         return IMGS_4SHOTS , MULTI_ANS_CAP_4SHOTS
     elif args.shots == 8 and args.test_type == 'simple' and args.prompt_type == 'std':
         return IMGS_8SHOTS, SIMPLE_STD_8SHOTS
-    elif args.shots == 8 and args.test_type == 'simple' and args.prompt_type == 'cap':
+    elif args.shots == 8 and args.test_type == 'simple' and args.prompt_type == 'img_cap':
         return IMGS_8SHOTS, SIMPLE_CAP_8SHOTS
     elif args.shots == 8 and args.test_type == 'multi_ans' and args.prompt_type == 'std':
         return IMGS_8SHOTS , MULTI_ANS_STD_8SHOTS
-    elif args.shots == 8 and args.test_type == 'multi_ans' and args.prompt_type == 'cap':
+    elif args.shots == 8 and args.test_type == 'multi_ans' and args.prompt_type == 'img_cap':
         return IMGS_8SHOTS , MULTI_ANS_CAP_8SHOTS
+    else:
+        raise Exception('invalid arguments')
 
 def load_image_examples(imgs, image_processor):
     image_examples = list()
@@ -37,6 +40,7 @@ def load_image_examples(imgs, image_processor):
 
 def load_lang_examples(texts):
     lang_examples = '<|endofchunk|>'.join(texts)
+    lang_examples += '<|endofchunk|>'
     return lang_examples
 
 def get_model():
@@ -49,6 +53,8 @@ def get_model():
 
 def get_results(dataset, args):
     model, image_processor, tokenizer = get_model()
+    model.to(device)
+    tokenizer.padding_side = "left"
     imgs, texts = example_mapper(args)
     vision_examples = load_image_examples(imgs, image_processor)
     text_examples = load_lang_examples(texts)

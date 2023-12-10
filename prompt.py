@@ -36,12 +36,12 @@ def append_prompts(dataset, args):
     if args.test_type == 'simple' and args.prompt_type == 'std':
         return dataset.map(gen_simple_qa_prompt, batched=False, fn_kwargs={'template': SIMPLE_STD})
     elif args.test_type == 'simple' and args.prompt_type == 'img_cap':
-        dataset = gen_image_captions(dataset, args.model, args.img_caption_type)
+        dataset = gen_image_captions(dataset)
         return dataset.map(gen_simple_cap_prompt, batched=False, fn_kwargs={'template': SIMPLE_IMG_CAP})
     elif args.test_type == 'multi_ans' and args.prompt_type == 'std':
         return dataset.map(gen_multi_ans_qa_prompt, batched=False, fn_kwargs={'template': MULTI_ANS_STD})
     elif args.test_type == 'multi_ans' and args.prompt_type == 'img_cap':
-        dataset = gen_image_captions(dataset, args.model, args.img_caption_type)
+        dataset = gen_image_captions(dataset)
         return dataset.map(gen_multi_ans_cap_prompt, batched=False, fn_kwargs={'template': MULTI_ANS_IMG_CAP})
     else:
         raise Exception('Invalid test type/ prompt type')

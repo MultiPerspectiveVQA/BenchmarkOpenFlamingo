@@ -3,7 +3,7 @@ from transformers import pipeline
 from tqdm import tqdm
 
 
-def gen_image_captions(dataset, img_caption_type):
+def gen_image_captions(dataset):
     pipe = pipeline("image-to-text", model="Salesforce/blip-image-captioning-large", device=1)
     caption_col = list()
     for record in tqdm(dataset):
