@@ -1,11 +1,11 @@
 # package files
 from gen_image_captions.image_captioner import gen_image_captions
 
-SIMPLE_STD = 'Question: {question} Answer: {answer} Question: Do all the given answers for the question point to the same visual content in the image? Answer:'
-SIMPLE_IMG_CAP = 'Context: {caption} Question: {question} Answer: {answer} Question: Do all the given answers for the question point to the same visual content in the image? Answer:'
+SIMPLE_STD = '<image> Question: {question} Answer: {answer} Question: Do all the given answers for the question point to the same visual content in the image? Answer:'
+SIMPLE_IMG_CAP = '<image> Context: {caption} Question: {question} Answer: {answer} Question: Do all the given answers for the question point to the same visual content in the image? Answer:'
 
-MULTI_ANS_STD = 'Indicate every possible answer to the given question. Question: {question} Answer:'
-MULTI_ANS_IMG_CAP = 'Context: {caption} Indicate every possible answer to the given question. Question: {question} Answer:'
+MULTI_ANS_STD = '<image> Indicate every possible answer to the given question. Question: {question} Answer:'
+MULTI_ANS_IMG_CAP = '<image> Context: {caption} Indicate every possible answer to the given question. Question: {question} Answer:'
 
 
 def gen_simple_qa_prompt(record, template):
